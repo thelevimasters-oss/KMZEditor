@@ -27,7 +27,13 @@ def load_kmz(path: str) -> KMLDocument:
 
 def _write_node_to_simplekml(kml_doc: simplekml.Kml, parent_folder, node: KMLNode):
     if node.type in (KMLNodeType.FOLDER, KMLNodeType.DOCUMENT):
-        folder = kml_doc.newfolder(name=(node.name or ""))
+        container = parent_folder if parent_folder is not None else kml_doc
+        if node.type == KMLNodeType.DOCUMENT:
+            folder = container.newdocument(name=(node.name or ""))
+        else:
+            folder = container.newfolder(name=(node.name or ""))
+        if node.description:
+            folder.description = node.description
         for ch in node.children:
             _write_node_to_simplekml(kml_doc, folder, ch)
         return
