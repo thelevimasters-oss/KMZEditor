@@ -1,7 +1,9 @@
 from .kml_model import KMLDocument, KMLNodeType
 def validate_document(doc: KMLDocument) -> list[str]:
     issues=[]
-    if not doc.root: issues.append("Empty document."); return issues
+    if not doc.root:
+        issues.append("Empty document.")
+        return issues
     def visit(n):
         if n.type==KMLNodeType.PLACEMARK:
             if n.style_url and not (n.style_url.startswith("#") or n.style_url.startswith("http")):
